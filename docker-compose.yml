@@ -1,0 +1,56 @@
+version: '2'
+services:
+    nginx:
+        container_name: statistics_api_nginx
+        build: ./docker/nginx
+        restart: always
+        volumes:
+            - ./www:/www
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/site.conf
+            - ./docker/nginx/log:/var/log/nginx
+        ports:
+            - "80:80"
+        links:
+            - php
+            - php-bundle
+            - mysql
+
+    php:
+        container_name: statistics_api_php
+        build: ./docker/php
+        restart: always
+        volumes:
+            - ./www:/www
+            - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/php-fpm.conf
+            - ./docker/php/log:/var/log/php
+
+        links:
+            - mysql
+
+    php-bundle:
+        container_name: statistics_api_php_bundle
+        command: top -b
+        build: ./docker/php-bundle
+        working_dir: /www
+        volumes:
+            - ./www:/www
+            - ./docker/php-bundle/php.ini:/usr/local/etc/php/conf.d/php.ini
+        links:
+            - mysql
+
+    mysql:
+        container_name: statistics_api_mysql
+        build: ./docker/db/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: service
+            MYSQL_DATABASE: service
+            MYSQL_USER: service
+            MYSQL_PASSWORD: service
+        ports:
+            - "33060:3306"
+        volumes:
+            - ./docker/db/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+            - ./docker/db/mysql/log:/var/log/mysql
+            - ./docker/db/mysql/data:/var/lib/mysql

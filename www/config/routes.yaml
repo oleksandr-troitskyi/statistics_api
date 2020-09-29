@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+score:
+  path:       /api/score
+  controller: App\Controller\APIController::score
+  methods:    GET
