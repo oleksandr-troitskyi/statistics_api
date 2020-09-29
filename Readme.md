@@ -1,7 +1,7 @@
 ## Set up
 1. Install Docker
 1. Pull project
-1. Add `statistics_api.loc  127.0.0.1` to `hosts` file
+1. Add `127.0.0.1 statistics_api.loc` to `hosts` file
 1. Run `make build` at project root directory to build containers and install dependencies
 
 ## How it works
